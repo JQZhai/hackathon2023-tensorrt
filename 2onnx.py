@@ -7,7 +7,6 @@ import numpy as np
 import tensorrt as trt
 import torch
 
-import sys
 from pytorch_lightning import seed_everything
 from annotator.util import resize_image, HWC3
 from annotator.canny import CannyDetector
