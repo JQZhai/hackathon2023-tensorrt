@@ -71,7 +71,7 @@ class pth_onnx():
                 
             if k == "unet":
                 temp_model = getattr(self.model.model, v)
-                onnxfile = "./unet/unet.onnx"
+                onnxfile = "./unet.onnx"
                 x = torch.randn(1, 4, 32, 48, device='cuda')
                 timesteps = torch.zeros(1, device='cuda') + 500
                 context = torch.randn(1, 77, 768, device='cuda')
