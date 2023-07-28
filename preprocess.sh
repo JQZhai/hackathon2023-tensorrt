@@ -5,7 +5,7 @@ trtexec \
 --onnx=./controlnet.onnx \
 --optShapes=x:1x4x32x48,hint:1x3x256x384,timesteps:1,context:1x77x768 \
 --workspace=10240 \
---saveEngine=./dynamic/controlnet.plan \
+--saveEngine=./controlnet.plan \
 --fp16 --skipInference \
 --verbose \
 --device=7
@@ -14,7 +14,7 @@ trtexec \
 --onnx=./unet.onnx \
 --optShapes=x:1x4x32x48,timesteps:1,context:1x77x768 \
 --workspace=10240 \
---saveEngine=./dynamic/unet.plan \
+--saveEngine=./unet.plan \
 --fp16 --skipInference \
 --verbose \
 --device=7
