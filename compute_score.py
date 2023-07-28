@@ -6,7 +6,7 @@ import datetime
 from canny2image_TRT import hackathon
 
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "6,7"  # 使用设备0和设备1
+
 
 block_idx = InceptionV3.BLOCK_INDEX_BY_DIM[2048]
 model = InceptionV3([block_idx]).to("cuda")
