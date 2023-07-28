@@ -334,24 +334,19 @@ class ControlLDM(LatentDiffusion):
         if cond['c_concat'] is None:
             eps = diffusion_model(x=x_noisy, timesteps=t, context=cond_txt, control=None, only_mid_control=self.only_mid_control)
         else:
-            # control = self.control_model(x=x_noisy, hint=torch.cat(cond['c_concat'], 1), timesteps=t, context=cond_txt)
             hint_in = torch.cat(cond['c_concat'], 1)
-
             b, c, h, w = x_noisy.shape
-
             buffer_device = []
             buffer_device.append(x_noisy.reshape(-1).data_ptr())
             buffer_device.append(hint_in.reshape(-1).data_ptr())
             buffer_device.append(t.reshape(-1).data_ptr())
             buffer_device.append(cond_txt.reshape(-1).data_ptr())
-
             control_out = []
-
             for i in range(3):
                 temp = torch.zeros(b, 320, h, w, dtype=torch.float32).to("cuda")
                 control_out.append(temp)
                 buffer_device.append(temp.reshape(-1).data_ptr())
-
+            
             temp = torch.zeros(b, 320, h//2, w//2, dtype=torch.float32).to("cuda")
             control_out.append(temp)
             buffer_device.append(temp.reshape(-1).data_ptr())
@@ -375,7 +370,7 @@ class ControlLDM(LatentDiffusion):
                 control_out.append(temp)
                 buffer_device.append(temp.reshape(-1).data_ptr())
 
-            self.control_context.execute_v2(buffer_device)
+            self.context["control_net"].execute_v2(buffer_device)
 
             control = [c * scale for c, scale in zip(control_out, self.control_scales)]
             eps = diffusion_model(x=x_noisy, timesteps=t, context=cond_txt, control=control, only_mid_control=self.only_mid_control)
