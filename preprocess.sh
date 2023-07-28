@@ -7,8 +7,7 @@ trtexec \
 --workspace=10240 \
 --saveEngine=./controlnet.plan \
 --fp16 --skipInference \
---verbose \
---device=7
+--verbose 
 
 trtexec \
 --onnx=./unet.onnx \
@@ -16,8 +15,7 @@ trtexec \
 --workspace=10240 \
 --saveEngine=./unet.plan \
 --fp16 --skipInference \
---verbose \
---device=7
+--verbose 
 
 trtexec \
 --onnx=./clip.onnx \
@@ -25,8 +23,7 @@ trtexec \
 --workspace=10240 \
 --saveEngine=./dynamic/clip.plan \
 --fp16 --skipInference \
---verbose \
---device=7
+--verbose 
 
 trtexec \
 --onnx=./vae.onnx \
@@ -34,5 +31,4 @@ trtexec \
 --workspace=10240 \
 --saveEngine=./dynamic/vae.plan \
 --fp16 --skipInference \
---verbose \
---device=7
+--verbose 
