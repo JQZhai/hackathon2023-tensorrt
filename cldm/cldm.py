@@ -370,7 +370,7 @@ class ControlLDM(LatentDiffusion):
                 control_out.append(temp)
                 buffer_device.append(temp.reshape(-1).data_ptr())
 
-            # self.context["control_net"].execute_v2(buffer_device)
+            self.context["control_net"].execute_v2(buffer_device)
 
             control = [c * scale for c, scale in zip(control_out, self.control_scales)]
             eps = diffusion_model(x=x_noisy, timesteps=t, context=cond_txt, control=control, only_mid_control=self.only_mid_control)
