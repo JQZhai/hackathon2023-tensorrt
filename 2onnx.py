@@ -67,24 +67,55 @@ class pth_onnx():
                 )
                 
             if k == "unet":
+                control_in = []
+                control_names = []
+                b=1
+                h=32
+                w=48
+                for i in range(3):
+                    temp = torch.zeros(b, 320, h, w, dtype=torch.float32).to("cuda")
+                    control_in.append(temp)
+                
+                temp = torch.zeros(b, 320, h//2, w//2, dtype=torch.float32).to("cuda")
+                control_in.append(temp)
+
+                for i in range(2):
+                    temp = torch.zeros(b, 640, h//2, w//2, dtype=torch.float32).to("cuda")
+                    control_in.append(temp)
+
+                temp = torch.zeros(b, 640, h//4, w//4, dtype=torch.float32).to("cuda")
+                control_in.append(temp)
+
+                for i in range(2):
+                    temp = torch.zeros(b, 1280, h//4, w//4, dtype=torch.float32).to("cuda")
+                    control_in.append(temp)
+
+                for i in range(4):
+                    temp = torch.zeros(b, 1280, h//8, w//8, dtype=torch.float32).to("cuda")
+                    control_in.append(temp)
+                
+                dynamic_table = {'x' : {0 : 'B', 2 : 'H', 3 : 'W'},
+                        'timesteps' : {0 : 'B'},
+                        'context' : {0 : 'B'}}
+                for i in range(13):
+                    control_names.append("control_" + str(i))
+                    dynamic_table[control_names[i]] = {0:'bs'}#,2:'dim2',3:'dim3'}
+
                 temp_model = getattr(self.model.model, v)
                 onnxfile = "./unet.onnx"
                 x = torch.randn(1, 4, 32, 48, device='cuda')
                 timesteps = torch.zeros(1, device='cuda') + 500
                 context = torch.randn(1, 77, 768, device='cuda')
-                # control = 13个张量的列表，shape[1,320,32,48]
                 torch.onnx.export(temp_model, 
-                (x, timesteps, context), 
+                (x, timesteps, context, control_in), 
                 onnxfile, 
                 export_params=True, 
                 do_constant_folding=True, 
                 keep_initializers_as_inputs=True, 
                 opset_version=17, 
-                input_names=["x", "timesteps", "context"], 
+                input_names=["x", "timesteps", "context"] + control_names, 
                 output_names=["output"], 
-                dynamic_axes={'x' : {0 : '2B', 2 : 'H', 3 : 'W'},
-                            'context' : {0 : '2B'},
-                            'output' : {0 : '2B', 2: 'H', 3: 'W'}}
+                dynamic_axes=dynamic_table
                 )
             
             if k == "clip":

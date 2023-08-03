@@ -55,8 +55,21 @@ class hackathon():
                 self.model.context[i].set_binding_shape(3, (1, 77, 768))
             if i == 'unet':
                 self.model.context[i].set_binding_shape(0, (1, 4, 32, 48))
-                self.model.context[i].set_binding_shape(2, (1, ))
-                self.model.context[i].set_binding_shape(3, (1, 77, 768))
+                self.model.context[i].set_binding_shape(1, (1, ))
+                self.model.context[i].set_binding_shape(2, (1, 77, 768))
+                self.model.context[i].set_binding_shape(3, (1, 320, 32, 48))
+                self.model.context[i].set_binding_shape(4, (1, 320, 32, 48))
+                self.model.context[i].set_binding_shape(5, (1, 320, 32, 48))
+                self.model.context[i].set_binding_shape(6, (1, 320, 16, 24))
+                self.model.context[i].set_binding_shape(7, (1, 640, 16, 24))
+                self.model.context[i].set_binding_shape(8, (1, 640, 16, 24))
+                self.model.context[i].set_binding_shape(9, (1, 640, 8, 12))
+                self.model.context[i].set_binding_shape(10,(1, 1280, 8, 12))
+                self.model.context[i].set_binding_shape(11,(1, 1280, 8, 12))
+                self.model.context[i].set_binding_shape(12, (1, 1280, 4, 6))
+                self.model.context[i].set_binding_shape(13, (1, 1280, 4, 6))
+                self.model.context[i].set_binding_shape(14, (1, 1280, 4, 6))  
+                self.model.context[i].set_binding_shape(14, (1, 1280, 4, 6))              
             if i == 'clip':
                 self.model.context[i].set_binding_shape(0, (1, 77))
             if i == 'vae':
