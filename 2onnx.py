@@ -103,20 +103,22 @@ class pth_onnx():
 
                 temp_model = getattr(self.model.model, v)
                 onnxfile = "./unet.onnx"
-                x = torch.randn(1, 4, 32, 48, device='cuda')
-                timesteps = torch.zeros(1, device='cuda') + 500
-                context = torch.randn(1, 77, 768, device='cuda')
-                torch.onnx.export(temp_model, 
-                (x, timesteps, context, control_in), 
-                onnxfile, 
-                export_params=True, 
-                do_constant_folding=True, 
-                keep_initializers_as_inputs=True, 
-                opset_version=17, 
-                input_names=["x", "timesteps", "context"] + control_names, 
-                output_names=["output"], 
-                # dynamic_axes=dynamic_table
-                )
+                with torch.inference_mode(), torch.autocast("cuda"):
+                    temp_model = temp_model.cuda()
+                    x = torch.randn(1, 4, 32, 48, device='cuda')
+                    timesteps = torch.zeros(1, device='cuda') + 500
+                    context = torch.randn(1, 77, 768, device='cuda')
+                    torch.onnx.export(temp_model, 
+                    (x, timesteps, context, control_in), 
+                    onnxfile, 
+                    export_params=True, 
+                    do_constant_folding=True, 
+                    keep_initializers_as_inputs=True, 
+                    opset_version=17, 
+                    input_names=["x", "timesteps", "context"] + control_names, 
+                    output_names=["output"], 
+                    # dynamic_axes=dynamic_table
+                    )
             
             if k == "clip":
                 temp_model = getattr(self.model, v)
