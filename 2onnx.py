@@ -16,7 +16,7 @@ from cldm.ddim_hacked import DDIMSampler
 from cuda import cudart
 
 
-os.system("rm -rf ./*.onnx ./*.plan ./*.cache")
+# os.system("rm -rf ./*.onnx ./*.plan ./*.cache")
 np.set_printoptions(precision=3, linewidth=100, suppress=True)
 cudart.cudaDeviceSynchronize()
 
@@ -69,6 +69,8 @@ class pth_onnx():
             if k == "unet":
                 control_in = []
                 control_names = []
+                for i in range(13):
+                    control_names.append("control_" + str(i))
                 b=1
                 h=32
                 w=48
@@ -98,8 +100,7 @@ class pth_onnx():
                         'timesteps' : {0 : 'B'},
                         'context' : {0 : 'B'}}
                 for i in range(13):
-                    control_names.append("control_" + str(i))
-                    dynamic_table[control_names[i]] = {0:'bs'}#,2:'dim2',3:'dim3'}
+                    dynamic_table[control_names[i]] = {0:'bs',2:'dim2',3:'dim3'}
 
                 temp_model = getattr(self.model.model, v)
                 onnxfile = "./unet.onnx"
@@ -135,7 +136,8 @@ class pth_onnx():
                 opset_version=17, 
                 input_names=["input_ids"], 
                 output_names=["text_embeddings", 'pooler_output'], 
-                # dynamic_axes={'input_ids':{0:'B'}, 'text_embeddings':{0:'B'}}
+                dynamic_axes={'input_ids':{0:'B'},
+                                'text_embeddings':{0:'B'}}
                 )
 
             if k == "vae":
@@ -153,7 +155,8 @@ class pth_onnx():
                 opset_version=17, 
                 input_names=["latent"], 
                 output_names=["images"], 
-                # dynamic_axes={'latent': {0: 'B', 2: 'H', 3: 'W'},'images': {0: 'B', 2: '8H', 3: '8W'}}
+                # dynamic_axes={'latent': {0: 'B', 2: 'H', 3: 'W'},
+                #                 'images': {0: 'B', 2: '8H', 3: '8W'}}
                 )
 ins = pth_onnx()
 ins.initialize()
