@@ -20,7 +20,7 @@ class hackathon():
 
     def initialize(self):
         self.apply_canny = CannyDetector()
-        self.model = create_model('/home/player/bak/models/cldm_v15.yaml').cpu()
+        self.model = create_model('./models/cldm_v15.yaml').cpu()
         self.model.load_state_dict(load_state_dict('/home/player/ControlNet/models/control_sd15_canny.pth', location='cuda'))
         self.model = self.model.cuda()
         self.ddim_sampler = DDIMSampler(self.model)
@@ -29,19 +29,19 @@ class hackathon():
         trt.init_libnvinfer_plugins(self.trt_logger, '')
 
         self.model.engine = {}
-        with open("/home/player/bak/controlnet.plan", 'rb') as f:
+        with open("./controlnet.plan", 'rb') as f:
             engine_str = f.read()
         self.model.engine['control_net'] = trt.Runtime(self.trt_logger).deserialize_cuda_engine(engine_str)
         
-        with open("/home/player/bak/unet.plan", 'rb') as f:
+        with open("./unet.plan", 'rb') as f:
             engine_str = f.read()
         self.model.engine['unet'] = trt.Runtime(self.trt_logger).deserialize_cuda_engine(engine_str)
         
-        with open("/home/player/bak/clip.plan", 'rb') as f:
+        with open("./clip.plan", 'rb') as f:
             engine_str = f.read()
         self.model.engine['clip'] = trt.Runtime(self.trt_logger).deserialize_cuda_engine(engine_str)
         
-        with open("/home/player/bak/vae.plan", 'rb') as f:
+        with open("./vae.plan", 'rb') as f:
             engine_str = f.read()
         self.model.engine['vae'] = trt.Runtime(self.trt_logger).deserialize_cuda_engine(engine_str)
 
