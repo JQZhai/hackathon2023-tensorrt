@@ -374,20 +374,20 @@ class ControlLDM(LatentDiffusion):
             self.context["control_net"].execute_v2(buffer_device)
 
             control = [c * scale for c, scale in zip(control_out, self.control_scales)]
-            # diffusion_buffer_device = []
-            # diffusion_buffer_device.append(x_noisy.reshape(-1).data_ptr())
-            # diffusion_buffer_device.append(t.reshape(-1).data_ptr())
-            # diffusion_buffer_device.append(cond_txt.reshape(-1).data_ptr())
+            diffusion_buffer_device = []
+            diffusion_buffer_device.append(x_noisy.reshape(-1).data_ptr())
+            diffusion_buffer_device.append(t.reshape(-1).data_ptr())
+            diffusion_buffer_device.append(cond_txt.reshape(-1).data_ptr())
 
-            # for c in control:
-            #     c = c.reshape(-1).data_ptr()
-            # diffusion_buffer_device.append(control)
+            for c in control:
+                c = c.reshape(-1).data_ptr()
+            diffusion_buffer_device.append(control)
 
-            # temp = torch.zeros(1,4,32,48, dtype=torch.float32).to("cuda")
-            # diffusion_buffer_device.append(temp.reshape(-1).data_ptr())  
-            # self.context["unet"].execute_v2(diffusion_buffer_device)
-            # eps = temp
-            eps = diffusion_model(x=x_noisy, timesteps=t, context=cond_txt, control=control, only_mid_control=self.only_mid_control)
+            temp = torch.zeros(1,4,32,48, dtype=torch.float16).to("cuda")
+            diffusion_buffer_device.append(temp.reshape(-1).data_ptr())  
+            self.context["unet"].execute_v2(diffusion_buffer_device)
+            eps = temp
+            # eps = diffusion_model(x=x_noisy, timesteps=t, context=cond_txt, control=control, only_mid_control=self.only_mid_control)
         return eps
 
     @torch.no_grad()
