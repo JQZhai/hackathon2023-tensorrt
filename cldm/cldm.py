@@ -381,7 +381,7 @@ class ControlLDM(LatentDiffusion):
 
             for c in control:
                 c = c.reshape(-1).data_ptr()
-            diffusion_buffer_device.append(control)
+                diffusion_buffer_device.append(control)
 
             temp = torch.zeros(1,4,32,48, dtype=torch.float16).to("cuda")
             diffusion_buffer_device.append(temp.reshape(-1).data_ptr())  
