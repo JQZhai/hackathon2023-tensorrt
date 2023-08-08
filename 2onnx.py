@@ -107,7 +107,7 @@ class pth_onnx():
                 with torch.inference_mode(), torch.autocast("cuda"):
                     temp_model = temp_model.cuda()
                     x = torch.randn(1, 4, 32, 48, device='cuda')
-                    timesteps = torch.zeros(1, device='cuda') + 500
+                    timesteps = torch.tensor([951] , dtype=torch.int32, device='cuda')
                     context = torch.randn(1, 77, 768, device='cuda')
                     torch.onnx.export(temp_model, 
                     (x, timesteps, context, control_in), 
