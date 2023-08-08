@@ -664,25 +664,25 @@ class LatentDiffusion(DDPM):
     def get_learned_conditioning(self, c):
         if self.cond_stage_forward is None:
             if hasattr(self.cond_stage_model, 'encode') and callable(self.cond_stage_model.encode):
-                # batch_encoding = self.cond_stage_model.tokenizer(c, truncation=True, max_length=self.cond_stage_model.max_length, return_length=True,
-                #                         return_overflowing_tokens=False, padding="max_length", return_tensors="pt")
-                # tokens = batch_encoding["input_ids"].to(self.cond_stage_model.device)
+                batch_encoding = self.cond_stage_model.tokenizer(c, truncation=True, max_length=self.cond_stage_model.max_length, return_length=True,
+                                        return_overflowing_tokens=False, padding="max_length", return_tensors="pt")
+                tokens = batch_encoding["input_ids"].to(self.cond_stage_model.device)
                 
-                # buffer = []
-                # buffer.append(tokens.reshape(-1).data_ptr())
-                # c1 = torch.zeros(1,77,768, dtype=torch.float32).to("cuda")
-                # c2 = torch.zeros(1,768, dtype=torch.float32).to("cuda")
-                # buffer.append(c1.reshape(-1).data_ptr())
-                # buffer.append(c2.reshape(-1).data_ptr())
-                # self.context["clip"].execute_v2(buffer)
-                # if self.cond_stage_model.layer == "last":
-                #     c = c1
-                # elif self.cond_stage_model.layer == "pooled":
-                #     c = c2[:, None, :]
-                # else:
-                #     c = c1[self.cond_stage_model.layer_idx]
+                buffer = []
+                buffer.append(tokens.reshape(-1).data_ptr())
+                c1 = torch.zeros(1,77,768, dtype=torch.float32).to("cuda")
+                c2 = torch.zeros(1,768, dtype=torch.float32).to("cuda")
+                buffer.append(c1.reshape(-1).data_ptr())
+                buffer.append(c2.reshape(-1).data_ptr())
+                self.context["clip"].execute_v2(buffer)
+                if self.cond_stage_model.layer == "last":
+                    c = c1
+                elif self.cond_stage_model.layer == "pooled":
+                    c = c2[:, None, :]
+                else:
+                    c = c1[self.cond_stage_model.layer_idx]
  
-                c = self.cond_stage_model.encode(c)
+                # c = self.cond_stage_model.encode(c)
                 
                 if isinstance(c, DiagonalGaussianDistribution):
                     c = c.mode()
@@ -844,13 +844,13 @@ class LatentDiffusion(DDPM):
             z = rearrange(z, 'b h w c -> b c h w').contiguous()
 
         z = 1. / self.scale_factor * z
-        # buffer = []
-        # buffer.append(z.reshape(-1).data_ptr())
-        # res = torch.zeros(1, 3, 256, 384, dtype=torch.float32).to("cuda")
-        # buffer.append(res.reshape(-1).data_ptr())
-        # self.context["vae"].execute_v2(buffer)
-        # return res
-        return self.first_stage_model.decode(z)
+        buffer = []
+        buffer.append(z.reshape(-1).data_ptr())
+        res = torch.zeros(1, 3, 256, 384, dtype=torch.float32).to("cuda")
+        buffer.append(res.reshape(-1).data_ptr())
+        self.context["vae"].execute_v2(buffer)
+        return res
+        # return self.first_stage_model.decode(z)
 
     @torch.no_grad()
     def encode_first_stage(self, x):
