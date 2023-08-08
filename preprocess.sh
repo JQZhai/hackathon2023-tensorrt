@@ -19,7 +19,7 @@ trtexec \
 --onnx=./vae.onnx \
 --workspace=10240 \
 --saveEngine=./vae.plan \
---skipInference 
+--skipInference --fp16
 # --optShapes=latent:1x4x32x48 \
 
 
