@@ -136,8 +136,8 @@ class pth_onnx():
                 opset_version=17, 
                 input_names=["input_ids"], 
                 output_names=["text_embeddings", 'pooler_output'], 
-                dynamic_axes={'input_ids':{0:'B'},
-                                'text_embeddings':{0:'B'}}
+                # dynamic_axes={'input_ids':{0:'B'},
+                #                 'text_embeddings':{0:'B'}}
                 )
 
             if k == "vae":
