@@ -118,29 +118,16 @@ class FrozenCLIPEmbedder(AbstractEncoder):
         batch_encoding = self.tokenizer(text, truncation=True, max_length=self.max_length, return_length=True,
                                         return_overflowing_tokens=False, padding="max_length", return_tensors="pt")
         tokens = batch_encoding["input_ids"].to(self.device)
-        return tokens
-        # outputs = self.transformer(input_ids=tokens, output_hidden_states=self.layer=="hidden")     
+
+        outputs = self.transformer(input_ids=tokens, output_hidden_states=self.layer=="hidden")     
         
-        # with open("/home/player/bak/clip.plan", 'rb') as f:
-        #     engine_str = f.read()
-        
-        # self.trt_logger = trt.Logger(trt.Logger.WARNING)
-        # self.engine = trt.Runtime(self.trt_logger).deserialize_cuda_engine(engine_str)
-        # self.context = self.engine.create_execution_context()
-        # self.context.set_binding_shape(0, (1, 77))
-        # buffer = []
-        # buffer.append(tokens.reshape(-1).data_ptr())
-        # c = torch.zeros(1,77,768, dtype=torch.float32).to("cuda")
-        # buffer.append(c.reshape(-1).data_ptr())
-        # self.context.execute_v2(buffer)
-        # return tokens
-        # if self.layer == "last":
-        #     z = outputs.last_hidden_state
-        # elif self.layer == "pooled":
-        #     z = outputs.pooler_output[:, None, :]
-        # else:
-        #     z = outputs.hidden_states[self.layer_idx]
-        # return z
+        if self.layer == "last":
+            z = outputs.last_hidden_state
+        elif self.layer == "pooled":
+            z = outputs.pooler_output[:, None, :]
+        else:
+            z = outputs.hidden_states[self.layer_idx]
+        return z
 
     def encode(self, text):
         return self(text)
