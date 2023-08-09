@@ -63,7 +63,7 @@ class pth_onnx():
                 opset_version=17, 
                 input_names=["x", "hint", "timesteps", "context"], 
                 output_names=output_names,
-                # dynamic_axes=dynamic_table
+                dynamic_axes=dynamic_table
                 )
                 
             if k == "unet":
