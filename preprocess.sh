@@ -12,15 +12,13 @@ trtexec \
 --onnx=./clip.onnx \
 --workspace=10240 \
 --saveEngine=./clip.plan \
---skipInference  
-# --optShapes=input_ids:1x77 \
+--skipInference  --optShapes=input_ids:1x77
 
 trtexec \
 --onnx=./vae.onnx \
 --workspace=10240 \
 --saveEngine=./vae.plan \
---skipInference --fp16
-# --optShapes=latent:1x4x32x48 \
+--skipInference --fp16  --optShapes=latent:1x4x32x48 
 
 
 trtexec \
