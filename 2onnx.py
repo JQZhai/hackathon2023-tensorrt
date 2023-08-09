@@ -100,15 +100,15 @@ class pth_onnx():
                         'timesteps' : {0 : 'B'},
                         'context' : {0 : 'B'}}
                 for i in range(13):
-                    dynamic_table[control_names[i]] = {0:'bs'} #,2:'dim2',3:'dim3'}
+                    dynamic_table[control_names[i]] = {0:'bs'}#,2:'dim2',3:'dim3'}
 
                 temp_model = getattr(self.model.model, v)
                 onnxfile = "./unet.onnx"
                 with torch.inference_mode(), torch.autocast("cuda"):
                     temp_model = temp_model.cuda()
-                    x = torch.randn(1, 4, 32, 48, device='cuda')
-                    timesteps = torch.tensor([951] , dtype=torch.int32, device='cuda')
-                    context = torch.randn(1, 77, 768, device='cuda')
+                    x = torch.randn(1, 4, 32, 48, dtype=torch.float32, device='cuda')
+                    timesteps = torch.tensor([951] , dtype=torch.int64, device='cuda')
+                    context = torch.randn(1, 77, 768, dtype=torch.float32, device='cuda')
                     torch.onnx.export(temp_model, 
                     (x, timesteps, context, control_in), 
                     onnxfile, 
@@ -118,7 +118,7 @@ class pth_onnx():
                     opset_version=17, 
                     input_names=["x", "timesteps", "context"] + control_names, 
                     output_names=["output"], 
-                    dynamic_axes=dynamic_table
+                    # dynamic_axes=dynamic_table
                     )
             
             if k == "clip":
