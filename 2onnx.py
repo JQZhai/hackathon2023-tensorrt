@@ -100,7 +100,7 @@ class pth_onnx():
                         'timesteps' : {0 : 'B'},
                         'context' : {0 : 'B'}}
                 for i in range(13):
-                    dynamic_table[control_names[i]] = {0:'bs',2:'dim2',3:'dim3'}
+                    dynamic_table[control_names[i]] = {0:'bs'} #,2:'dim2',3:'dim3'}
 
                 temp_model = getattr(self.model.model, v)
                 onnxfile = "./unet.onnx"
@@ -118,7 +118,7 @@ class pth_onnx():
                     opset_version=17, 
                     input_names=["x", "timesteps", "context"] + control_names, 
                     output_names=["output"], 
-                    # dynamic_axes=dynamic_table
+                    dynamic_axes=dynamic_table
                     )
             
             if k == "clip":
