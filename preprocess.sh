@@ -3,7 +3,6 @@ python3 2onnx.py
 
 trtexec \
 --onnx=./controlnet.onnx \
---workspace=10240 \
 --saveEngine=./controlnet.plan \
 --fp16 --skipInference \
 --optShapes=x:1x4x32x48,hint:1x3x256x384,timesteps:1,context:1x77x768 \
@@ -12,7 +11,6 @@ trtexec \
 
 trtexec \
 --onnx=./clip.onnx \
---workspace=10240 \
 --saveEngine=./clip.plan \
 --skipInference  \
 --optShapes=input_ids:1x77 \
@@ -22,7 +20,6 @@ trtexec \
 
 trtexec \
 --onnx=./vae.onnx \
---workspace=10240 \
 --saveEngine=./vae.plan \
 --skipInference  \
 --optShapes=latent:1x4x32x48 \
