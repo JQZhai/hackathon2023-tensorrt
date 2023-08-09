@@ -6,19 +6,28 @@ trtexec \
 --workspace=10240 \
 --saveEngine=./controlnet.plan \
 --fp16 --skipInference \
---optShapes=x:1x4x32x48,hint:1x3x256x384,timesteps:1,context:1x77x768 
+--optShapes=x:1x4x32x48,hint:1x3x256x384,timesteps:1,context:1x77x768 \
+--minShapes=x:1x4x32x48,hint:1x3x256x384,timesteps:1,context:1x77x768 \
+--maxShapes=x:1x4x32x48,hint:1x3x256x384,timesteps:1,context:1x77x768
 
 trtexec \
 --onnx=./clip.onnx \
 --workspace=10240 \
 --saveEngine=./clip.plan \
---skipInference  --optShapes=input_ids:1x77
+--skipInference  \
+--optShapes=input_ids:1x77 \
+--minShapes=input_ids:1x77 \
+--maxShapes=input_ids:1x77
+
 
 trtexec \
 --onnx=./vae.onnx \
 --workspace=10240 \
 --saveEngine=./vae.plan \
---skipInference  --optShapes=latent:1x4x32x48 
+--skipInference  \
+--optShapes=latent:1x4x32x48 \
+--minShapes=latent:1x4x32x48 \
+--maxShapes=latent:1x4x32x48
 
 
 trtexec \
