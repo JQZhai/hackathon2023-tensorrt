@@ -136,8 +136,8 @@ class pth_onnx():
                 opset_version=17, 
                 input_names=["input_ids"], 
                 output_names=["text_embeddings", 'pooler_output'], 
-                # dynamic_axes={'input_ids':{0:'B'},
-                #                 'text_embeddings':{0:'B'}}
+                dynamic_axes={'input_ids':{0:'B'},
+                                'text_embeddings':{0:'B'}}
                 )
 
             if k == "vae":
@@ -155,8 +155,8 @@ class pth_onnx():
                 opset_version=17, 
                 input_names=["latent"], 
                 output_names=["images"], 
-                # dynamic_axes={'latent': {0: 'B', 2: 'H', 3: 'W'},
-                #                 'images': {0: 'B', 2: '8H', 3: '8W'}}
+                dynamic_axes={'latent': {0: 'B', 2: 'H', 3: 'W'},
+                                'images': {0: 'B', 2: '8H', 3: '8W'}}
                 )
 ins = pth_onnx()
 ins.initialize()
