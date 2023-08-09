@@ -33,7 +33,7 @@ for i in range(20):
             "longbody, lowres, bad anatomy, bad hands, missing fingers", 
             1, 
             256, 
-            20,
+            10,
             False, 
             1, 
             9, 
