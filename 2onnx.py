@@ -126,7 +126,7 @@ class pth_onnx():
                 model = temp_model.transformer
                 self.tokenizer = temp_model.tokenizer
                 onnxfile = "./clip.onnx"
-                input_ids = torch.zeros(1, 77, dtype= torch.int32, device='cuda')
+                input_ids = torch.zeros(1, 77, dtype= torch.int64, device='cuda')
                 torch.onnx.export(model, 
                 input_ids, 
                 onnxfile, 

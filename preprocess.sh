@@ -5,7 +5,8 @@ trtexec \
 --onnx=./controlnet.onnx \
 --workspace=10240 \
 --saveEngine=./controlnet.plan \
---builderOptimizationLevel=5 --fp16
+--fp16
+# --builderOptimizationLevel=5
 # --optShapes=x:1x4x32x48,hint:1x3x256x384,timesteps:1,context:1x77x768 \
 
 trtexec \
