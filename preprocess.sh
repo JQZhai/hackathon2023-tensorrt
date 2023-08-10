@@ -3,7 +3,6 @@ python3 2onnx.py
 
 trtexec \
 --onnx=./controlnet.onnx \
---workspace=10240 \
 --saveEngine=./controlnet.plan \
 --fp16 \
 --builderOptimizationLevel=5 \
@@ -16,18 +15,16 @@ trtexec \
 --optShapes=input_ids:1x77 \
 --minShapes=input_ids:1x77 \
 --maxShapes=input_ids:1x77 \
---workspace=10240 \
 --saveEngine=./clip.plan \
 --builderOptimizationLevel=5
 
 trtexec \
 --onnx=./vae.onnx \
---workspace=10240 \
 --saveEngine=./vae.plan \
 --builderOptimizationLevel=5 \
 --optShapes=latent:1x4x32x48 \
 --minShapes=latent:1x4x32x48 \
---maxShapes=latent:1x4x32x48
+--maxShapes=latent:1x4x32x48 --fp16
 
 
 trtexec \
