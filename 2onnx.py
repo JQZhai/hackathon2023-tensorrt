@@ -63,7 +63,7 @@ class pth_onnx():
                 opset_version=17, 
                 input_names=["x", "hint", "timesteps", "context"], 
                 output_names=output_names,
-                # dynamic_axes=dynamic_table
+                dynamic_axes=dynamic_table
                 )
                 
             if k == "unet":
@@ -118,7 +118,7 @@ class pth_onnx():
                     opset_version=17, 
                     input_names=["x", "timesteps", "context"] + control_names, 
                     output_names=["output"], 
-                    # dynamic_axes=dynamic_table
+                    dynamic_axes=dynamic_table
                     )
             
             if k == "clip":
@@ -155,8 +155,8 @@ class pth_onnx():
                 opset_version=17, 
                 input_names=["latent"], 
                 output_names=["images"], 
-                # dynamic_axes={'latent': {0: 'B', 2: 'H', 3: 'W'},
-                #                 'images': {0: 'B', 2: '8H', 3: '8W'}}
+                dynamic_axes={'latent': {0: 'B', 2: 'H', 3: 'W'},
+                                'images': {0: 'B', 2: '8H', 3: '8W'}}
                 )
 ins = pth_onnx()
 ins.initialize()

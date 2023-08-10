@@ -104,7 +104,7 @@ class hackathon():
                 self.model.low_vram_shift(is_diffusing=True)
 
             self.model.control_scales = [strength * (0.825 ** float(12 - i)) for i in range(13)] if guess_mode else ([strength] * 13)  # Magic number. IDK why. Perhaps because 0.825**12<0.01 but 0.826**12>0.01
-            ddim_steps=10
+            ddim_steps=12
             samples, intermediates = self.ddim_sampler.sample(ddim_steps, num_samples,
                                                         shape, cond, verbose=False, eta=eta,
                                                         unconditional_guidance_scale=scale,
