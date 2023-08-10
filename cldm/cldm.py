@@ -330,7 +330,7 @@ class ControlLDM(LatentDiffusion):
         diffusion_model = self.model.diffusion_model
 
         cond_txt = torch.cat(cond['c_crossattn'], 1)
-
+        t = t.to(torch.int32)
         if cond['c_concat'] is None:
             eps = diffusion_model(x=x_noisy, timesteps=t, context=cond_txt, control=None, only_mid_control=self.only_mid_control)
         else:
