@@ -6,8 +6,9 @@ trtexec \
 --saveEngine=./controlnet.plan \
 --optShapes=x:1x4x32x48,hint:1x3x256x384,timesteps:1,context:1x77x768 \
 --minShapes=x:1x4x32x48,hint:1x3x256x384,timesteps:1,context:1x77x768 \
+--fp16 \
 --maxShapes=x:1x4x32x48,hint:1x3x256x384,timesteps:1,context:1x77x768
-# --builderOptimizationLevel=5 \ --fp16 \
+# --builderOptimizationLevel=5 \ 
 
 trtexec \
 --onnx=./clip.onnx \
