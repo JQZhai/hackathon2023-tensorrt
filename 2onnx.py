@@ -43,7 +43,7 @@ class pth_onnx():
                 context = torch.randn(1, 77, 768, dtype=torch.float32).to("cuda")
                 x = torch.randn(1, 4, H//8, W //8, dtype=torch.float32).to("cuda")
                 hint = torch.randn(1, 3, H, W, dtype=torch.float32).to("cuda")
-                timesteps = torch.zeros(1, dtype=torch.int64).to("cuda")
+                timesteps = torch.zeros(1, dtype=torch.int32).to("cuda")
                 dynamic_table = {'x' : {0 : 'bs', 2 : 'H', 3 : 'W'}, 
                                 'hint' : {0 : 'bs', 2 : '8H', 3 : '8W'}, 
                                 'timesteps' : {0 : 'bs'},
@@ -107,7 +107,7 @@ class pth_onnx():
                 with torch.inference_mode(), torch.autocast("cuda"):
                     temp_model = temp_model.cuda()
                     x = torch.randn(1, 4, 32, 48, dtype=torch.float32, device='cuda')
-                    timesteps = torch.tensor([951] , dtype=torch.int64, device='cuda')
+                    timesteps = torch.tensor([951] , dtype=torch.int32, device='cuda')
                     context = torch.randn(1, 77, 768, dtype=torch.float32, device='cuda')
                     torch.onnx.export(temp_model, 
                     (x, timesteps, context, control_in), 
@@ -126,7 +126,7 @@ class pth_onnx():
                 model = temp_model.transformer
                 self.tokenizer = temp_model.tokenizer
                 onnxfile = "./clip.onnx"
-                input_ids = torch.zeros(1, 77, dtype= torch.int64, device='cuda')
+                input_ids = torch.zeros(1, 77, dtype= torch.int32, device='cuda')
                 torch.onnx.export(model, 
                 input_ids, 
                 onnxfile, 
